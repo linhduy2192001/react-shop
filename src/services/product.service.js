@@ -1,7 +1,7 @@
 import api from '../config/api'
 const productService={
-    getProduct(){
-        return api.get('/product')
+    getProduct(query = ''){
+        return api.get(`/product${query}`)
     }
 }
 export default productService

@@ -1,11 +1,14 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
+import Paginate from '../components/Paginate'
 import ProductCard from '../components/ProductCard'
-import {useQuery} from '../core'
+import {useCurrentPage, useQuery} from '../core'
 import productService from '../services/product.service'
 
 export default function Shop() {
-    const {data, loading} = useQuery(() => productService.getProduct(),[])
-
+   
+    const currentPage = useCurrentPage()
+    const {data, loading, paginate} = useQuery(() => productService.getProduct(`?page=${currentPage}`),[currentPage])
   return (
     <section className="py-11">
     <div className="container">
@@ -737,38 +740,7 @@ export default function Shop() {
             }
           </div>
           {/* Pagination */}
-          <nav className="d-flex justify-content-center justify-content-md-end">
-            <ul className="pagination pagination-sm text-gray-400">
-              <li className="page-item">
-                <a className="page-link page-link-arrow" href="#">
-                  <i className="fa fa-caret-left" />
-                </a>
-              </li>
-              <li className="page-item active">
-                <a className="page-link" href="#">1</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">2</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">3</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">4</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">5</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link" href="#">6</a>
-              </li>
-              <li className="page-item">
-                <a className="page-link page-link-arrow" href="#">
-                  <i className="fa fa-caret-right" />
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <Paginate totalPage={paginate.totalPage}/>
         </div>
       </div>
     </div>
