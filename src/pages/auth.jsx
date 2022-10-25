@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
 import Input from '../components/Input'
-import { useAsync, useForm } from '../core'
+import { useAsync, useForm, useReduxAction } from '../core'
 import { loginAction, registerAction } from '../stores/authReducer'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
@@ -11,8 +11,10 @@ import authService from '../services/auth.service'
 
 export default function Auth() {
     const dispatch = useDispatch()
-    const [errorMessage, setErrorMessage] = useState()
-    const [loading, setLoading] = useState()
+    // const [errorMessage, setErrorMessage] = useState()
+    // const [loading, setLoading] = useState()
+
+    const {loading, error: loginError,action:loginA} = useReduxAction(loginAction)
 
     const {user} = useSelector(store => store.auth)
     const {excute:register, loading: loadingRegister, error:errorRegisterMessage} = useAsync(authService.register)
@@ -51,17 +53,8 @@ export default function Auth() {
     const onLogin = (ev) => {
         ev.preventDefault()
         if (loginForm.validate()){
-            setErrorMessage('')
-            setLoading(true)
-            dispatch(loginAction({
-                form:loginForm.form,
-                success: () => {
-                    setLoading(false)
-                },
-                error: (error) => {
-                    setErrorMessage(error.message)
-                }
-            }))
+            
+            dispatch(loginA(loginForm.form))
         }
 
     }
@@ -103,6 +96,7 @@ export default function Auth() {
                     {/* Heading */}
                     <h6 className="mb-7">Returning Customer</h6>
                     {/* Form */}
+                    {loginError}
                     <form onSubmit={onLogin}>
                         <div className="row">
                         <div className="col-12">
