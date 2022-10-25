@@ -72,6 +72,14 @@ export function validate(form, rules) {
                     }
                 }
             }
+            
+            if (rule.confirm) {
+                if(form[rule.confirm] !== form[i]){
+                    errorObj[i] = rule.message || `Vui lòng điền giống ${rule.confirm}`
+                        break;
+                }
+            }
+
         }
     }
 

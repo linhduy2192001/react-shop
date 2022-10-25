@@ -1,9 +1,28 @@
 import React, { Children } from 'react'
+import { LoadingOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
 
-export default function Button({children}) {
+const IconStyle = styled.span`
+    display:flex;
+    margin-right:10px;`
+
+const ButtonRoot=styled.button`
+    display:flex;
+    align-item:center;
+    &:disabled{
+        cursor:no-drop;
+    }`
+
+export default function Button({children,loading}) {
   return (
-    <button className="btn btn-sm btn-dark" type="submit">
+    <ButtonRoot disabled={loading} className="btn btn-sm btn-dark" type="submit">
+    {
+        loading && <IconStyle>
+            <LoadingOutlined />
+        </IconStyle>
+    }
+        
         {children}
-    </button>
+    </ButtonRoot>
   )
 }

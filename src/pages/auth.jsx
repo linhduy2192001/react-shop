@@ -1,12 +1,42 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
 import Input from '../components/Input'
-import { useForm } from '../core'
-import { loginAction } from '../stores/authReducer'
+import { useAsync, useForm } from '../core'
+import { loginAction, registerAction } from '../stores/authReducer'
+import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { path } from '../config/path'
+import authService from '../services/auth.service'
 
 export default function Auth() {
     const dispatch = useDispatch()
+    const [errorMessage, setErrorMessage] = useState()
+    const [loading, setLoading] = useState()
+
+    const {user} = useSelector(store => store.auth)
+    const {excute:register, loading: loadingRegister, error:errorRegisterMessage} = useAsync(authService.register)
+
+    // const [errorRegisterMessage, setErrorRegisterMessage] = useState()
+    // const [loadingRegister, setLoadingRegister] = useState()
+
+    const registerForm = useForm({
+        username:[
+            {required: true},
+            {regexp: 'email'},
+        ],
+        password:[
+            {required: true},
+        ],
+        name:[
+            {required: true}
+        ],
+        confirmPassword: [
+            {required:true},
+            {confirm:'password'}
+        ]
+    })
+
     const loginForm= useForm({
         username:[
             {required: true},
@@ -14,17 +44,53 @@ export default function Auth() {
         ],
         password:[
             {required: true},
-            {min:6,max:32},
-            {regexp:'password'},
+            // {min:6,max:32},
+            // {regexp:'password'},
         ]
     })
     const onLogin = (ev) => {
         ev.preventDefault()
         if (loginForm.validate()){
-            dispatch(loginAction(loginForm.form))
+            setErrorMessage('')
+            setLoading(true)
+            dispatch(loginAction({
+                form:loginForm.form,
+                success: () => {
+                    setLoading(false)
+                },
+                error: (error) => {
+                    setErrorMessage(error.message)
+                }
+            }))
         }
 
     }
+
+
+    const onRegister = async (ev) => {
+        ev.preventDefault()
+        if (registerForm.validate()){
+            await register(registerForm.form)
+            dispatch(loginAction({
+                form:{ 
+                    username:registerForm.form.username,
+                    password:registerForm.form.password
+                }
+            }))
+            // setErrorRegisterMessage('')
+            // setLoadingRegister(true)
+            // dispatch(registerAction({
+            //     form:registerForm.form,
+            //     success: () => {
+            //         setLoadingRegister(false)
+            //     },
+            //     error: (error) => {
+            //         setErrorRegisterMessage(error.message)
+            //     }
+            // }))
+        }
+    }
+    if (user) return <Navigate to={path.Account.Profile}/>
 
   return (
     <section className="py-12">
@@ -92,8 +158,8 @@ export default function Auth() {
                         </div>
                         <div className="col-12">
                             {/* Button */}
-                            <Button>
-                            Sign In
+                            <Button loading={loading}>
+                                Sign In
                             </Button>
                         </div>
                         </div>
@@ -107,53 +173,53 @@ export default function Auth() {
                     <div className="card-body">
                     {/* Heading */}
                     <h6 className="mb-7">New Customer</h6>
+                    <p>{errorRegisterMessage}</p>
                     {/* Form */}
-                    <form>
+
+                    <form onSubmit={onRegister}>
                         <div className="row">
+                       
                         <div className="col-12">
                             {/* Email */}
-                            <div className="form-group">
-                            <label className="sr-only" htmlFor="registerFirstName">
-                                First Name *
-                            </label>
-                            <input className="form-control form-control-sm" id="registerFirstName" type="text" placeholder="First Name *" required />
-                            </div>
+                           <Input
+                                placeholder="Full name *"
+                                {...registerForm.register('name')}
+                           />
                         </div>
                         <div className="col-12">
                             {/* Email */}
-                            <div className="form-group">
-                            <label className="sr-only" htmlFor="registerLastName">
-                                Last Name *
-                            </label>
-                            <input className="form-control form-control-sm" id="registerLastName" type="text" placeholder="Last Name *" required />
-                            </div>
-                        </div>
-                        <div className="col-12">
-                            {/* Email */}
-                            <div className="form-group">
-                            <label className="sr-only" htmlFor="registerEmail">
-                                Email Address *
-                            </label>
-                            <input className="form-control form-control-sm" id="registerEmail" type="email" placeholder="Email Address *" required />
-                            </div>
+                            <Input
+                                placeholder=" Email Address *"
+                                {...registerForm.register('username')}
+                            />
                         </div>
                         <div className="col-12 col-md-6">
                             {/* Password */}
-                            <div className="form-group">
+                            {/* <div className="form-group">
                             <label className="sr-only" htmlFor="registerPassword">
                                 Password *
                             </label>
                             <input className="form-control form-control-sm" id="registerPassword" type="password" placeholder="Password *" required />
-                            </div>
+                            </div> */}
+                            <Input
+                                placeholder="  Password *"
+                                {...registerForm.register('password')}
+                                type="password"
+                            />
                         </div>
                         <div className="col-12 col-md-6">
                             {/* Password */}
-                            <div className="form-group">
+                            {/* <div className="form-group">
                             <label className="sr-only" htmlFor="registerPasswordConfirm">
                                 Confirm Password *
                             </label>
                             <input className="form-control form-control-sm" id="registerPasswordConfirm" type="password" placeholder="Confrm Password *" required />
-                            </div>
+                            </div> */}
+                            <Input
+                                placeholder="  Confirm Password *"
+                                {...registerForm.register('confirmPassword')}
+                                type="password"
+                            />
                         </div>
                         <div className="col-12 col-md-auto">
                             {/* Link */}
@@ -168,16 +234,16 @@ export default function Auth() {
                             <div className="custom-control custom-checkbox">
                                 <input className="custom-control-input" id="registerNewsletter" type="checkbox" />
                                 <label className="custom-control-label" htmlFor="registerNewsletter">
-                                Sign me up for the Newsletter!
+                                    Sign me up for the Newsletter!
                                 </label>
                             </div>
                             </div>
                         </div>
                         <div className="col-12">
-                            {/* Button */}
-                            <button className="btn btn-sm btn-dark" type="submit">
+                            {/* Button */} 
+                            <Button loading={loadingRegister} >
                             Register
-                            </button>
+                            </Button>
                         </div>
                         </div>
                     </form>

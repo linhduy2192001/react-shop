@@ -11,7 +11,7 @@ export const useForm = (rules) => {
         setError(errorObj)
         return Object.keys(errorObj).length === 0
     }
-    
+     
     const register = (name) =>{
         return {
             defaultValue:form[name],
@@ -23,6 +23,7 @@ export const useForm = (rules) => {
     return {
         form,
         setForm,
+        setError,
         error,
         register,
         validate: _validate

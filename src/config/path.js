@@ -3,6 +3,8 @@ export const path = {
     Shop:'/shop',
     Auth:'/auth',
     Account:{
-        Profile:''
+        Profile:'/account'
     }
 }
+
+export default path
