@@ -5,6 +5,7 @@ import Page404 from "./pages/404"
 
 const Home = lazy(() => import('./pages/index'))
 const Shop = lazy(() => import('./pages/shop'))
+const Auth = lazy(() => import('./pages/auth'))
 
 const routers = [
     {
@@ -16,6 +17,9 @@ const routers = [
         },
         {
             path:path.Shop, element: <Shop/>
+        },
+        {
+            path:path.Auth, element:<Auth/>
         },
         {
             path:'*', element: <Page404/>

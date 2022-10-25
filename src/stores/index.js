@@ -1,7 +1,11 @@
-import {combineReducers, createStore } from "redux";
+import {applyMiddleware, combineReducers, createStore } from "redux";
 import pageReducer from "./pageReducer";
-
-const reducers = combineReducers({page:pageReducer})
-const store = createStore(reducers,window.__REDUX_DEVTOOLS_EXTENSION__&& window.__REDUX_DEVTOOLS_EXTENSION__())
+import thunk from 'redux-thunk'
+import authReducer from "./authReducer";
+const reducers = combineReducers({
+    page:pageReducer,
+    auth: authReducer
+})
+const store = createStore(reducers,applyMiddleware(thunk))
 
 export default store
