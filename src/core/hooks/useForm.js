@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { validate } from "../utils/validate"
 
-export const useForm = (rules) => {
-    const [form, setForm] = useState({})
+export const useForm = (rules, initialValue={}) => {
+    const [form, setForm] = useState(initialValue)
     const [error, setError] = useState({})
 
     const _validate = () => {

@@ -1,7 +1,9 @@
 import { lazy } from "react"
 import { path } from "./config/path"
 import MainLayout from "./layouts/MainLayout"
+import ProfileLayout from "./layouts/ProfileLayout"
 import Page404 from "./pages/404"
+import Profile from "./pages/account"
 
 const Home = lazy(() => import('./pages/index'))
 const Shop = lazy(() => import('./pages/shop'))
@@ -20,6 +22,14 @@ const routers = [
         },
         {
             path:path.Auth, element:<Auth/>
+        },
+        {
+            path:path.Account.Profile, element: <ProfileLayout/>,
+            children:[
+                {
+                    index:true, element:<Profile/> 
+                }
+            ]
         },
         {
             path:'*', element: <Page404/>
