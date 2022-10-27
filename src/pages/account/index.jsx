@@ -1,16 +1,24 @@
+import { message } from 'antd'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import { useAsync, useForm } from '../../core'
 import { useAuth } from '../../hooks/useAuth'
 import userService from '../../services/user.service'
+import { getUserInfoAction } from '../../stores/userReducer'
+import {validate as _validate} from '../../core/utils/validate'
 
 export default function Profile() {
 
     const { user } = useAuth()
+    const dispatch = useDispatch()
+
+
     const {excute: updateInfo, error,loading} = useAsync(userService.updateInfo)
-    const { form, register, validate} = useForm({ 
+    const {excute: changePassword, error: errorPassword,loading: loadingPassword} = useAsync(userService.changePassword)
+
+    const { form, register, validate, setError} = useForm({ 
         name: [
             {required: true}
         ]
@@ -20,7 +28,32 @@ export default function Profile() {
        ev.preventDefault()
         if (validate()){
             try{
-                const user = await updateInfo(form)
+              if (form.newPassword || form.oldPassword){
+                const errorObj = _validate(form, {
+                  oldPassword: [
+                    {required :true},
+                    {min: 6, max: 32}
+                  ],
+                  newPassword: [
+                    {required :true},
+                    {min: 6, max: 32}
+                  ]
+                })
+                setError(errorObj)
+
+
+                if (Object.keys(errorObj).length === 0) {
+                  await changePassword({
+                    newPassword: form.newPassword,
+                    oldPassword: form.oldPassword
+                  })
+                  message.success('Cập nhật password thành công!')
+                }
+              }
+                await updateInfo(form)
+                dispatch(getUserInfoAction()) 
+                message.success('Cập nhật thông tin user thành công')
+
             }
             catch(err){
 
@@ -30,7 +63,7 @@ export default function Profile() {
   return (
     <div className="col-12 col-md-9 col-lg-8 offset-lg-1">
           {/* Form */}
-          {error}
+          {error || errorPassword}
           <form onSubmit={onSubmit}>
             <div className="row">
               <div className="col-12 col-md-12">
@@ -76,7 +109,7 @@ export default function Profile() {
                     placeholder="Current Password *"
                     label=" Current Password *"
                     type='password'
-                    {...register('password')}
+                    {...register('oldPassword')}
 
                 />
               </div>
@@ -92,7 +125,7 @@ export default function Profile() {
                     placeholder=" New Password *"
                     label="New Password *"
                     type='password'
-                    {...register('confirmPassword')}
+                    {...register('newPassword')}
 
                 />
               </div>
@@ -155,7 +188,7 @@ export default function Profile() {
               </div>
               <div className="col-12">
                 {/* Button */}
-                <Button loading={loading} className="btn btn-dark" type="submit">Save Changes</Button>
+                <Button loading={loading || loadingPassword} className="btn btn-dark" type="submit">Save Changes</Button>
               </div>
             </div>
           </form>

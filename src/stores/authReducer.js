@@ -1,6 +1,7 @@
 import { getUser, setToken, setUser } from "../core"
 import authService from "../services/auth.service"
 import userService from "../services/user.service"
+import { getUserInfoAction, setUserAction } from "./userReducer"
 
 const initialValue = {
     user:getUser()
@@ -12,9 +13,14 @@ export const loginAction = (data) => {
         try{
             const token = await authService.login(data.form)
             setToken(token.data)
-            const user = await  userService.getUser()
-            setUser(user.data)
-            dispatch({type: 'auth/login' , payload: user.data})
+
+            dispatch(getUserInfoAction())
+
+            // const user = await  userService.getUser()
+            // setUser(user.data)
+
+            // // dispatch({type: 'auth/login' , payload: user.data})
+            // dispatch(setUserAction(user.data))
         }
         catch(err){
             data.error(err)

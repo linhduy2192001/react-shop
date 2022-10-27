@@ -1,7 +1,12 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import path from '../config/path'
+import { useAuth } from '../hooks/useAuth'
 
 export default function ProfileLayout() {
+
+  const {user} = useAuth()
+  if (!user) return <Navigate to={path.Auth}/>
   return (
     <section className="pt-7 pb-12">
     <div className="container">

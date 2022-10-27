@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { path } from '../config/path'
 import authService from '../services/auth.service'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Auth() {
     const dispatch = useDispatch()
@@ -16,7 +17,7 @@ export default function Auth() {
 
     const {loading, error: loginError,action:loginA} = useReduxAction(loginAction)
 
-    const {user} = useSelector(store => store.auth)
+    const {user} = useAuth()
     const {excute:register, loading: loadingRegister, error:errorRegisterMessage} = useAsync(authService.register)
 
     // const [errorRegisterMessage, setErrorRegisterMessage] = useState()

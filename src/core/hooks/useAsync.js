@@ -7,6 +7,7 @@ import { useState } from "react"
     const excute = async (...rest) => {
         try{
             setLoading(true)
+            setError('')
             const res = await promise(...rest)
             return res
         }
