@@ -1,4 +1,4 @@
-import { Drawer, Spin } from "antd";
+import { Drawer, Skeleton, Spin } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -44,6 +44,7 @@ export default function SearchDrawer() {
       <div className="modal-dialog modal-dialog-vertical" role="document">
         <div className="modal-content">
           {/* Close */}
+         
           <button
             onClick={() => dispatch(toggleSearchDrawerAction())}
             type="button"
@@ -100,10 +101,10 @@ export default function SearchDrawer() {
             {/* Heading */}
             <p>Search Results:</p>
             {/* Items */}
-
-            {product.map((e) => (
+            {
+                loading ? [...Array(5)].map((e,i)=> <Skeleton key={i} style={{height:100 , marginTop:10}}/>) : product.map((e) => (
               <div
-                key={e.id}
+                key={e.id} 
                 className="row align-items-center position-relative mb-5"
               >
                 <div className="col-4 col-md-3">
