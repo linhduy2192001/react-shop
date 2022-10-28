@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { toggleSearchDrawerAction } from '../stores/pageReducer'
+import { toggleCartDrawerAction, toggleSearchDrawerAction } from '../stores/pageReducer'
 
 export default function Header() {
 
@@ -9,6 +9,10 @@ export default function Header() {
     ev.preventDefault()
     dispatch(toggleSearchDrawerAction())
   }
+    const onOpenCartModal = (ev) => {
+      ev.preventDefault();
+      dispatch(toggleCartDrawerAction());
+    };
 
   return (
     <div>
@@ -559,7 +563,7 @@ export default function Header() {
                     <i className="fe fe-heart" />
                   </a>
                 </li>
-                <li className="nav-item ml-lg-n4">
+                <li className="nav-item ml-lg-n4" onClick={onOpenCartModal}>
                   <a className="nav-link" data-toggle="modal" href="#modalShoppingCart">
                     <span data-cart-items={2}>
                       <i className="fe fe-shopping-cart" />
