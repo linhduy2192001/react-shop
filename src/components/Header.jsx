@@ -1,6 +1,15 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { toggleSearchDrawerAction } from '../stores/pageReducer'
 
 export default function Header() {
+
+  const dispatch = useDispatch()
+  const onOpenSearchModal = (ev) => {
+    ev.preventDefault()
+    dispatch(toggleSearchDrawerAction())
+  }
+
   return (
     <div>
         <div className="navbar navbar-topbar navbar-expand-xl navbar-light bg-light">
@@ -536,7 +545,7 @@ export default function Header() {
               {/* Nav */}
               <ul className="navbar-nav flex-row">
                 <li className="nav-item">
-                  <a className="nav-link" data-toggle="modal" href="#modalSearch">
+                  <a onClick={onOpenSearchModal} className="nav-link" data-toggle="modal" href="#modalSearch">
                     <i className="fe fe-search" />
                   </a>
                 </li>

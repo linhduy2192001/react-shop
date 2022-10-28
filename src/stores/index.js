@@ -11,4 +11,5 @@ const reducers = combineReducers({
 const store = createStore(reducers,applyMiddleware(thunk))
 store.dispatch(getUserInfoAction())
 
+
 export default store

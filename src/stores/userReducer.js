@@ -12,9 +12,14 @@ export const getUserInfoAction =  () =>{
     return async (dispatch) => {
         try{
             if (getToken()){
-                const user = await userService.getUser()
+                const [user] = await Promise.all([
+                     userService.getUser(),
+                     userService.updateInfo({
+                        name:'dddđ'
+                     })
+                ])
+               
                 setUser(user.data)
-    
                 dispatch(setUserAction(user.data))
             }
 

@@ -1,45 +1,48 @@
-import React from 'react'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
-import { cn, useCurrentPage } from '../core'
+import React from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { cn, useCurrentPage } from "../core";
 
-export default function Paginate({totalPage}) {
-  const {pathname} = useLocation()
-  const currentPage = useCurrentPage()
+export default function Paginate({ totalPage }) {
+  const { pathname, search } = useLocation();
+  const currentPage = useCurrentPage();
 
-  const renderPage = () =>{
-     let start = currentPage - 2
-     let end = currentPage + 2
+  const renderPage = () => {
+    let start = currentPage - 2;
+    let end = currentPage + 2;
     if (start < 1) {
-      start =1 
-      end = 5
+      start = 1;
+      end = 5;
     }
-    if (end > totalPage){
-      end = totalPage
-      start = end - 4
-      if (start < 1 )
-        start = 1
+    if (end > totalPage) {
+      end = totalPage;
+      start = end - 4;
+      if (start < 1) start = 1;
     }
-     const list = []
-    for (let i = start ; i <= end; i++){
-      const path = `${pathname}?page=${i}`
-      list.push((
-        <li className={cn('page-item',{active: currentPage === i})}>
-                <Link className="page-link" to={path}>{i}</Link>
-              </li>
-      ))
+    const list = [];
+    for (let i = start; i <= end; i++) {
+      const searchParam = new URLSearchParams(search);
+      searchParam.set("page", i);
+      const path = `${pathname}?${searchParam.toString()}`;
+      list.push(
+        <li className={cn("page-item", { active: currentPage === i })}>
+          <Link className="page-link" to={path}>
+            {i}
+          </Link>
+        </li>
+      );
     }
-    return list
-  }
+    return list;
+  };
   return (
     <nav className="d-flex justify-content-center justify-content-md-end">
-            <ul className="pagination pagination-sm text-gray-400">
-              <li className="page-item">
-                <a className="page-link page-link-arrow" href="#">
-                  <i className="fa fa-caret-left" />
-                </a>
-              </li>
-              {renderPage()}
-              {/* <li className="page-item active">
+      <ul className="pagination pagination-sm text-gray-400">
+        <li className="page-item">
+          <a className="page-link page-link-arrow" href="#">
+            <i className="fa fa-caret-left" />
+          </a>
+        </li>
+        {renderPage()}
+        {/* <li className="page-item active">
                 <a className="page-link" href="#">1</a>
               </li>
               <li className="page-item">
@@ -57,12 +60,12 @@ export default function Paginate({totalPage}) {
               <li className="page-item">
                 <a className="page-link" href="#">6</a>
               </li> */}
-              <li className="page-item">
-                <a className="page-link page-link-arrow" href="#">
-                  <i className="fa fa-caret-right" />
-                </a>
-              </li>
-            </ul>
-          </nav>
-  )
+        <li className="page-item">
+          <a className="page-link page-link-arrow" href="#">
+            <i className="fa fa-caret-right" />
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
 }
