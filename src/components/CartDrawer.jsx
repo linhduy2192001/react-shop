@@ -1,15 +1,19 @@
 import { Drawer } from 'antd';
 import React from 'react'
 import { useDispatch } from 'react-redux';
+import { useCart } from '../hooks/useCart';
 import usePage from '../hooks/usePage';
 import { toggleCartDrawerAction } from '../stores/pageReducer';
+import CartItem from './CartItem';
 
 export default function CartDrawer() {
     const dispatch = useDispatch()
     const {openCartModal} =usePage()
 
+    const {cart} =useCart( )
+ 
   return (
-    <Drawer open={openCartModal} headerStyle={{display:'none'}}  bodyStyle={{padding:0}}>
+    <Drawer width={450} open={openCartModal} headerStyle={{display:'none'}}  bodyStyle={{padding:0}}>
       <div className="modal-dialog modal-dialog-vertical" role="document">
         {/* Full cart (add `.d-none` to disable it) */}
         <div className="modal-content">
@@ -29,80 +33,8 @@ export default function CartDrawer() {
           </div>
           {/* List group */}
           <ul className="list-group list-group-lg list-group-flush">
-            <li className="list-group-item">
-              <div className="row align-items-center">
-                <div className="col-4">
-                  {/* Image */}
-                  <a href="./product.html">
-                    <img
-                      className="img-fluid"
-                      src="/img/products/product-6.jpg"
-                      alt="..."
-                    />
-                  </a>
-                </div>
-                <div className="col-8">
-                  {/* Title */}
-                  <p className="font-size-sm font-weight-bold mb-6">
-                    <a className="text-body" href="./product.html">
-                      Cotton floral print Dress
-                    </a>{" "}
-                    <br />
-                    <span className="text-muted">$40.00</span>
-                  </p>
-                  {/*Footer */}
-                  <div className="d-flex align-items-center">
-                    {/* Select */}
-                    <select className="custom-select custom-select-xxs w-auto">
-                      <option value={1}>1</option>
-                      <option value={1}>2</option>
-                      <option value={1}>3</option>
-                    </select>
-                    {/* Remove */}
-                    <a className="font-size-xs text-gray-400 ml-auto" href="#!">
-                      <i className="fe fe-x" /> Remove
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li className="list-group-item">
-              <div className="row align-items-center">
-                <div className="col-4">
-                  {/* Image */}
-                  <a href="./product.html">
-                    <img
-                      className="img-fluid"
-                      src="/img/products/product-10.jpg"
-                      alt="..."
-                    />
-                  </a>
-                </div>
-                <div className="col-8">
-                  {/* Title */}
-                  <p className="font-size-sm font-weight-bold mb-6">
-                    <a className="text-body" href="./product.html">
-                      Suede cross body Bag
-                    </a>{" "}
-                    <br />
-                    <span className="text-muted">$49.00</span>
-                  </p>
-                  {/*Footer */}
-                  <div className="d-flex align-items-center">
-                    {/* Select */}
-                    <select className="custom-select custom-select-xxs w-auto">
-                      <option value={1}>1</option>
-                      <option value={1}>2</option>
-                      <option value={1}>3</option>
-                    </select>
-                    {/* Remove */}
-                    <a className="font-size-xs text-gray-400 ml-auto" href="#!">
-                      <i className="fe fe-x" /> Remove
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
+            {cart?.listItems?.map(e => <CartItem key={e.product.id} {...e}/>)}
+
           </ul>
           {/* Footer */}
           <div className="modal-footer line-height-fixed font-size-sm bg-light mt-auto">

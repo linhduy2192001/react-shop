@@ -19,6 +19,52 @@ export const  getCartAction = () => {
     }
 }
 
+// export const addCartAction = (data) => {
+//     return async (dispatch) => {
+//         try {
+//             const res = await cartService.addProduct(data.id)
+//             if (res.updateCount) {
+//                 dispatch(getCartAction())
+//               data?.success();
+//             } 
+//         }catch (err){
+//             data?.error(err);
+//         }finally {
+//             data?.finally()
+//          }
+//     }
+// }
+
+export const removeCartAction = (data) => {
+ return async (dispatch) => {
+   try {
+     const res = await cartService.addProduct(data.id);
+     if (res.updateCount) {
+       dispatch(getCartAction());
+       data?.success();
+     }
+   } catch (err) {
+     data?.error(err);
+   } finally {
+     data?.finally();
+   }
+ };
+}
+export const updateQuantityCartAction = (data) => {
+ return async (dispatch) => {
+   try {
+     const res = await cartService.addProduct(data.id);
+     if (res.updateCount) {
+       dispatch(getCartAction());
+       data?.success();
+     }
+   } catch (err) {
+     data?.error(err);
+   } finally {
+     data?.finally();
+   }
+ };
+};
 
 
 

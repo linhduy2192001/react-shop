@@ -1,10 +1,12 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { useCart } from '../hooks/useCart'
 import { toggleCartDrawerAction, toggleSearchDrawerAction } from '../stores/pageReducer'
 
 export default function Header() {
 
   const dispatch = useDispatch()
+  const {cart} = useCart()
   const onOpenSearchModal = (ev) => {
     ev.preventDefault()
     dispatch(toggleSearchDrawerAction())
@@ -565,7 +567,7 @@ export default function Header() {
                 </li>
                 <li className="nav-item ml-lg-n4" onClick={onOpenCartModal}>
                   <a className="nav-link" data-toggle="modal" href="#modalShoppingCart">
-                    <span data-cart-items={2}>
+                    <span data-cart-items={cart?.totalQuantity}>
                       <i className="fe fe-shopping-cart" />
                     </span>
                   </a>

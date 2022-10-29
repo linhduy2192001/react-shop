@@ -8,18 +8,13 @@ const initialState = {
 const SET_USER = 'user/setUser'
 export const setUserAction = (user) => ({ type: SET_USER, payload:user})
 
-export const getUserInfoAction =  () =>{
+export const   getUserInfoAction =  () =>{
     return async (dispatch) => {
         try{
             if (getToken()){
-                const [user] = await Promise.all([
-                     userService.getUser(),
-                     userService.updateInfo({
-                        name:'dddđ'
-                     })
-                ])
-               
-                setUser(user.data)
+                const user = await  userService.getUser()
+                     
+                setUser(user.data) 
                 dispatch(setUserAction(user.data))
             }
 
