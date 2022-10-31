@@ -1,5 +1,6 @@
 import { getToken } from "../core"
 import cartService from "../services/cart.service"
+import { createThunkAction } from "../utils/createThunkAction"
 
 const initialState = {
     cart :null
@@ -34,6 +35,7 @@ export const  getCartAction = () => {
 //          }
 //     }
 // }
+export const addCartAction = createThunkAction()
 
 export const removeCartAction = (data) => {
  return async (dispatch) => {
