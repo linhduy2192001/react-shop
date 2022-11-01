@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export const useReduxAction = (funcAction) => {
+export const useReduxAsync = (funcAction) => {
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
 

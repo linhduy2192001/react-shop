@@ -1,13 +1,13 @@
 export const createThunkAction = (callback) =>{
-    return (...rest) => {
+    return (data) => {
         return async (dispatch) => {
           try {
-            callback(...rest, dispatch)
-            data?.succes()
+            await callback(data, dispatch)
+            data?.success?.()
           } catch (err) {
-            data?.error(err);
+            data?.error?.(err); 
           } finally {
-            data?.finally();
+            data?.finally?.();
           }
         };
     }

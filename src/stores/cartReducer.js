@@ -35,38 +35,41 @@ export const  getCartAction = () => {
 //          }
 //     }
 // }
-export const addCartAction = createThunkAction()
-
-export const removeCartAction = (data) => {
- return async (dispatch) => {
-   try {
-     const res = await cartService.addProduct(data.id);
-     if (res.updateCount) {
-       dispatch(getCartAction());
-       data?.success();
-     }
-   } catch (err) {
-     data?.error(err);
-   } finally {
-     data?.finally();
-   }
- };
-}
-export const updateQuantityCartAction = (data) => {
- return async (dispatch) => {
-   try {
-     const res = await cartService.addProduct(data.id);
-     if (res.updateCount) {
-       dispatch(getCartAction());
-       data?.success();
-     }
-   } catch (err) {
-     data?.error(err);
-   } finally {
-     data?.finally();
-   }
- };
-};
+export const addCartAction = createThunkAction(async (data, dispatch) => {
+  const res = await cartService.addProduct(data.id)
+  if (res.updateCount){
+    dispatch(getCartAction())
+  }
+})
+export const removeCartAction = createThunkAction(async (data,dispatch) =>{
+  const res = await cartService.removeItem(data.id)
+  if(res.updateCount){
+    dispatch(getCartAction())
+  }
+})
+ 
+// export const removeCartAction = (data) => {
+//  return async (dispatch) => {
+//    try {
+//      const res = await cartService.addProduct(data.id);
+//      if (res.updateCount) {
+//        dispatch(getCartAction());
+//        data?.success();
+//      } 
+//    } catch (err) {
+//      data?.error(err);
+//    } finally {
+//      data?.finally();
+//    }
+//  };
+// }
+export const updateQuantityCartAction = createThunkAction(async (data,dispatch) => {
+ const res = await cartService.updateQuantity(data.id,{quantity:data.quantity})
+  if(res.updateCount){
+    dispatch(getCartAction());
+    data?.success();
+  }
+});
 
 
 

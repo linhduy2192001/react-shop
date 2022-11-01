@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useCart } from '../hooks/useCart';
 import usePage from '../hooks/usePage';
 import { toggleCartDrawerAction } from '../stores/pageReducer';
+import { currency } from '../utils/currency';
 import CartItem from './CartItem';
 
 export default function CartDrawer() {
@@ -39,7 +40,7 @@ export default function CartDrawer() {
           {/* Footer */}
           <div className="modal-footer line-height-fixed font-size-sm bg-light mt-auto">
             <strong>Subtotal</strong>{" "}
-            <strong className="ml-auto">$89.00</strong>
+            <strong className="ml-auto">{currency(cart?.subTotal || 0 )} vnd</strong>
           </div>
           {/* Buttons */}
           <div className="modal-body">
