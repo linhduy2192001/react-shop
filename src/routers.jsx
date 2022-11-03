@@ -8,6 +8,7 @@ import Profile from "./pages/account"
 const Home = lazy(() => import('./pages/index'))
 const Shop = lazy(() => import('./pages/shop'))
 const Auth = lazy(() => import('./pages/auth'))
+const Wishlist = lazy(() => import('./pages/account/wishlist'))
 
 const routers = [
     {
@@ -28,6 +29,9 @@ const routers = [
             children:[
                 {
                     index:true, element:<Profile/> 
+                },
+                {
+                    path:path.Account.Wishlist, element: <Wishlist/>
                 }
             ]
         },
